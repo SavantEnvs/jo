@@ -1,0 +1,9 @@
+project: savantenvs/jo
+# Target name preserved from the original mayhemheroes integration (which ran the bare
+# /install/bin/jo CLI fuzzed over stdin) so Mayhem run history stays continuous. It is now an
+# in-process, sanitized libFuzzer harness over jo's JSON engine (json.c) — the same parsing surface.
+target: jo
+
+cmds:
+  - cmd: /mayhem/fuzz_jo
+    libfuzzer: true
