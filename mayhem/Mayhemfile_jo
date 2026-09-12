@@ -1,0 +1,15 @@
+project: savantenvs/jo
+# Backport of the original mayhemheroes target (mayhemheroes/jo/jo run 11), which ran the bare
+# /install/bin/jo CLI fuzzed over stdin. mayhem/fuzz_jo.c ports that same surface in-process and
+# sanitized: it drives jo.c's stdin line path (append_kv → vnode/resolve_nested → stringify), which
+# is where the original run's one genuine defect lives (CWE-20, "Assertion failed: utf8_validate(str)
+# (json.c: emit_string: 1209)"), plus json.c's decode side.
+target: jo-buggy-mhh-run-11
+
+cmds:
+  - cmd: /mayhem/fuzz_jo
+    libfuzzer: true
+
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/jo-buggy-mhh-run-11/testsuite
